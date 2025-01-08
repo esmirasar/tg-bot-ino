@@ -2,3 +2,4 @@
 /docker-compose.yml
 /Dockerfile
 .idea/
+__pycache__
