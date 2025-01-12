@@ -11,8 +11,8 @@ services:
     depends_on:
       bot_database:
         condition: service_healthy
-    # volumes:
-    #  - .:.
+    volumes:
+      - ./main/database/alembic/versions:/usr/src/main/database/alembic/versions
     command: bash -c "
       alembic upgrade head &&
       python main/bot/main.py"
