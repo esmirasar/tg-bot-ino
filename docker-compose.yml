@@ -1,0 +1,39 @@
+services:
+  bot_app:
+    container_name: telegram_bot_container
+    networks:
+      - bot_networks
+    restart: always
+    build:
+      context: .
+    env_file:
+      - ./.env
+    depends_on:
+      bot_database:
+        condition: service_healthy
+    # volumes:
+    #  - .:.
+    command: bash -c "
+      alembic upgrade head &&
+      python main/bot/main.py"
+  bot_database:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER = ${DB_USER}
+      - POSTGRES_PASSWORD = ${DB_PASSWORD}
+      - POSTGRES_DB = ${DB_NAME}
+    ports:
+      - "${DB_CONNECTION_TO_LOCAL}:${DB_PORT}"
+    networks:
+      - bot_networks
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USERNAME}", "-d", "${DB_NAME}"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+networks:
+  bot_networks:
+
+volumes:
+  postgres_data:
