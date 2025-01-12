@@ -3,3 +3,4 @@
 /Dockerfile
 .idea/
 __pycache__
+.env
