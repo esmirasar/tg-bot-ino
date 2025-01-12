@@ -1,2 +1,5 @@
 /venv/
 .idea/
+/docker-compose.yml
+/Dockerfile
+__pycache__
