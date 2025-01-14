@@ -10,4 +10,5 @@ class BotConfig:
 
     ADMIN_ID = os.getenv('ADMIN_ID')
 
+
 config = BotConfig()
