@@ -7,7 +7,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from main.database.models import Base
+from telegram_bot.database.models import Base
 
 load_dotenv()
 

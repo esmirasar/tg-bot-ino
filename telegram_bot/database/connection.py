@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine, orm
 
-from models import Base
+from .models import Base
 
-DB = "postgresql://postgres:12345@localhost:5432/postgres_ino"
+
+DB = "postgresql://postgres_user:12345@bot_database:5432/postgres_name"
 
 engine = create_engine(DB, echo=True)
 

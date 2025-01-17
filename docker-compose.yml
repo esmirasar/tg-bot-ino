@@ -12,10 +12,10 @@ services:
       bot_database:
         condition: service_healthy
     volumes:
-      - ./main/database/alembic/versions:/usr/src/main/database/alembic/versions
+      - ./telegram_bot/database/alembic/versions:/usr/src/telegram_bot/database/alembic/versions
     command: bash -c "
       alembic upgrade head &&
-      python main/bot/main.py"
+      python telegram_bot/bot/main.py"
   bot_database:
     image: postgres:16-alpine
     environment:
