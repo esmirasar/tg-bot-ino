@@ -2,15 +2,17 @@ from aiogram import types, filters, Router
 
 from telegram_bot.database.connection import SessionLocal
 from telegram_bot.database.models import User
+from sqlalchemy.exc import OperationalError, IntegrityError
 
 start_router = Router()
-# TODO: при повторной отправке старт, выводится ошибка, что пользователь есть
+
+
+# TODO: дальше пользователь должен выбрать язык, который он хотел бы учить (под сообщением добавить кнопку выбрать язык и создать обработчик команды))
 
 @start_router.message(filters.Command("start"))
 async def message_start(message: types.Message):
-    with SessionLocal() as session:
-        user = session.get(User, message.from_user.id)
-        if not user:
+    try:
+        with SessionLocal() as session:
             new_user = User(
                 telegram_id=message.from_user.id,
                 telegram_name=message.from_user.full_name,
@@ -19,7 +21,11 @@ async def message_start(message: types.Message):
             session.add(new_user)
             session.commit()
 
-        await message.answer("Приветствую тебя, мой друг! Я буду твоим помощником в изучении нового языка."
-                             " Осталось выбрать какого именно.")
-
-
+            await message.answer("Приветствую тебя, мой друг! Я буду твоим помощником в изучении нового языка."
+                                 " Осталось выбрать какого именно.")
+    except IntegrityError:
+        await message.answer("Вы уже зарегестрированы. Какой язык бы вы хотели повторить?")
+    except OperationalError:
+        await message.answer("Кажется я не смог связаться с базой данных")
+    except Exception as e:
+        await message.answer(f"Произошла ошибка {e} ")
